@@ -1,0 +1,146 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidGameSummary(data, userId) {
+      return data.userId is string && data.userId == userId && data.userId.size() <= 128 &&
+             data.highestUnlockedLevel is int && data.highestUnlockedLevel >= 1 && data.highestUnlockedLevel <= 100000 &&
+             data.currentLevel is int && data.currentLevel >= 1 && data.currentLevel <= 100000 &&
+             data.hintsRemaining is int && data.hintsRemaining >= 0 && data.hintsRemaining <= 9999 &&
+             data.livesRemaining is int && data.livesRemaining >= 0 && data.livesRemaining <= 3 &&
+             data.soundEnabled is bool &&
+             data.musicEnabled is bool &&
+             data.livesSystemEnabled is bool &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidCompletedLevel(data, userId) {
+      return data.userId is string && data.userId == userId && data.userId.size() <= 128 &&
+             data.levelNumber is int && data.levelNumber >= 1 && data.levelNumber <= 100000 &&
+             data.stars is int && data.stars >= 1 && data.stars <= 3 &&
+             data.bestMoves is int && data.bestMoves >= 1 && data.bestMoves <= 10000 &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidDailyChallenge(data, userId) {
+      return data.userId is string && data.userId == userId && data.userId.size() <= 128 &&
+             data.dateKey is string && data.dateKey.size() == 10 && data.dateKey.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') &&
+             data.stars is int && data.stars >= 1 && data.stars <= 3 &&
+             data.moves is int && data.moves >= 1 && data.moves <= 10000 &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    match /users/{userId}/gameData/{docId} {
+      allow get: if isOwner(userId) && isValidId(docId);
+      allow list: if isOwner(userId);
+
+      allow create: if isOwner(userId) &&
+                       docId == 'summary' &&
+                       incoming().keys().hasAll([
+                         'userId', 'highestUnlockedLevel', 'currentLevel',
+                         'hintsRemaining', 'livesRemaining', 'soundEnabled',
+                         'musicEnabled', 'livesSystemEnabled', 'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'userId', 'highestUnlockedLevel', 'currentLevel',
+                         'hintsRemaining', 'livesRemaining', 'soundEnabled',
+                         'musicEnabled', 'livesSystemEnabled', 'createdAt', 'updatedAt'
+                       ]) &&
+                       isValidGameSummary(incoming(), userId);
+
+      allow update: if isOwner(userId) &&
+                       docId == 'summary' &&
+                       isValidGameSummary(incoming(), userId) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'highestUnlockedLevel', 'currentLevel', 'hintsRemaining',
+                         'livesRemaining', 'soundEnabled', 'musicEnabled',
+                         'livesSystemEnabled', 'updatedAt'
+                       ]);
+
+      allow delete: if isOwner(userId) && docId == 'summary';
+    }
+
+    match /users/{userId}/completedLevels/{levelId} {
+      allow get: if isOwner(userId) && isValidId(levelId);
+      allow list: if isOwner(userId);
+
+      allow create: if isOwner(userId) &&
+                       isValidId(levelId) &&
+                       incoming().keys().hasAll([
+                         'userId', 'levelNumber', 'stars', 'bestMoves', 'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'userId', 'levelNumber', 'stars', 'bestMoves', 'createdAt', 'updatedAt'
+                       ]) &&
+                       isValidCompletedLevel(incoming(), userId);
+
+      allow update: if isOwner(userId) &&
+                       isValidId(levelId) &&
+                       isValidCompletedLevel(incoming(), userId) &&
+                       incoming().userId == existing().userId &&
+                       incoming().levelNumber == existing().levelNumber &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'stars', 'bestMoves', 'updatedAt'
+                       ]);
+
+      allow delete: if isOwner(userId) && isValidId(levelId);
+    }
+
+    match /users/{userId}/dailyChallenges/{dateId} {
+      allow get: if isOwner(userId) && isValidId(dateId);
+      allow list: if isOwner(userId);
+
+      allow create: if isOwner(userId) &&
+                       isValidId(dateId) &&
+                       incoming().keys().hasAll([
+                         'userId', 'dateKey', 'stars', 'moves', 'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'userId', 'dateKey', 'stars', 'moves', 'createdAt', 'updatedAt'
+                       ]) &&
+                       isValidDailyChallenge(incoming(), userId);
+
+      allow update: if isOwner(userId) &&
+                       isValidId(dateId) &&
+                       isValidDailyChallenge(incoming(), userId) &&
+                       incoming().userId == existing().userId &&
+                       incoming().dateKey == existing().dateKey &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'stars', 'moves', 'updatedAt'
+                       ]);
+
+      allow delete: if isOwner(userId) && isValidId(dateId);
+    }
+  }
+}

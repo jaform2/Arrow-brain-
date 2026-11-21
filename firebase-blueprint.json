@@ -1,0 +1,161 @@
+{
+  "entities": {
+    "GameSummary": {
+      "title": "GameSummary",
+      "description": "Player's overall Arrow Brain game progress, hints, lives, and settings.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Firebase user UID."
+        },
+        "highestUnlockedLevel": {
+          "type": "integer",
+          "description": "Highest unlocked level number (>= 1)."
+        },
+        "currentLevel": {
+          "type": "integer",
+          "description": "Level the player was last on (>= 1)."
+        },
+        "hintsRemaining": {
+          "type": "integer",
+          "description": "Number of available hints."
+        },
+        "livesRemaining": {
+          "type": "integer",
+          "description": "Number of available lives (0..3)."
+        },
+        "soundEnabled": {
+          "type": "boolean",
+          "description": "Whether sound effects are enabled."
+        },
+        "musicEnabled": {
+          "type": "boolean",
+          "description": "Whether background music is enabled."
+        },
+        "livesSystemEnabled": {
+          "type": "boolean",
+          "description": "Whether the 3-lives mistake limit is enabled."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last update timestamp (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "highestUnlockedLevel",
+        "currentLevel",
+        "hintsRemaining",
+        "livesRemaining",
+        "soundEnabled",
+        "musicEnabled",
+        "livesSystemEnabled",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "CompletedLevel": {
+      "title": "CompletedLevel",
+      "description": "Completion record and best star rating for an individual level.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Firebase user UID."
+        },
+        "levelNumber": {
+          "type": "integer",
+          "description": "Level number (>= 1)."
+        },
+        "stars": {
+          "type": "integer",
+          "description": "Best stars earned (1..3)."
+        },
+        "bestMoves": {
+          "type": "integer",
+          "description": "Fewest moves taken to solve."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last update timestamp."
+        }
+      },
+      "required": [
+        "userId",
+        "levelNumber",
+        "stars",
+        "bestMoves",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "DailyChallengeRecord": {
+      "title": "DailyChallengeRecord",
+      "description": "Record of a completed Daily Brain Challenge.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Firebase user UID."
+        },
+        "dateKey": {
+          "type": "string",
+          "description": "ISO date key YYYY-MM-DD."
+        },
+        "stars": {
+          "type": "integer",
+          "description": "Stars earned (1..3)."
+        },
+        "moves": {
+          "type": "integer",
+          "description": "Moves used."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last update timestamp."
+        }
+      },
+      "required": [
+        "userId",
+        "dateKey",
+        "stars",
+        "moves",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/gameData/{docId}": {
+      "schema": { "$ref": "#/entities/GameSummary" },
+      "description": "Player's main game progress summary document."
+    },
+    "/users/{userId}/completedLevels/{levelId}": {
+      "schema": { "$ref": "#/entities/CompletedLevel" },
+      "description": "Individual completed level records keyed by level number."
+    },
+    "/users/{userId}/dailyChallenges/{dateId}": {
+      "schema": { "$ref": "#/entities/DailyChallengeRecord" },
+      "description": "Daily Brain Challenge completion records keyed by YYYY-MM-DD."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Arrow Brain",
+  "description": "Tap Away Arrows brain-training puzzle game with 1,000+ progressive levels, daily challenges, hints, and progress sync.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

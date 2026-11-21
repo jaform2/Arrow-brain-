@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0E2245" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Arrow Brain – Tap Away Puzzle</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+
+    <!-- ===================== MAIN MENU SCREEN ===================== -->
+    <section id="screen-menu" class="screen active" aria-label="Main Menu">
+      <div class="menu-container">
+        <!-- Top Utility Row -->
+        <header class="menu-topbar">
+          <button id="btn-save-status-pill" class="status-pill" type="button" aria-label="Save status and settings">
+            <span class="status-dot" aria-hidden="true"></span>
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17l4.59-4.59L16 11l-6 6z"/>
+            </svg>
+            <span>Auto-Saved Locally</span>
+          </button>
+
+          <div class="utility-actions">
+            <button id="btn-menu-sound" class="icon-btn" type="button" aria-label="Toggle sound effects" title="Toggle Sound"></button>
+            <button id="btn-menu-music" class="icon-btn" type="button" aria-label="Toggle background music" title="Toggle Music"></button>
+            <button id="btn-menu-settings" class="icon-btn" type="button" aria-label="Open settings" title="Settings">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- Logo & Branding -->
+        <div class="hero-brand">
+          <div class="logo-card">
+            <img src="img_arrow_brain_hero.jpg" alt="Arrow Brain game logo" />
+          </div>
+          <h1 class="brand-title">Arrow Brain</h1>
+          <span class="brand-subtitle-pill">TAP AWAY PUZZLE</span>
+        </div>
+
+        <!-- Player Progress Summary Card -->
+        <div class="progress-card" role="region" aria-label="Player Progress">
+          <div class="progress-stat">
+            <span id="stat-current-level" class="stat-value accent-blue">Lv. 1</span>
+            <span class="stat-label">Current Level</span>
+          </div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="progress-stat">
+            <span id="stat-completed" class="stat-value accent-emerald">0</span>
+            <span class="stat-label">Completed</span>
+          </div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="progress-stat">
+            <span id="stat-stars" class="stat-value accent-gold">★ 0</span>
+            <span class="stat-label">Stars</span>
+          </div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="progress-stat">
+            <span id="stat-hints" class="stat-value accent-navy">3</span>
+            <span class="stat-label">Hints</span>
+          </div>
+        </div>
+
+        <!-- Primary Continue / Play Game Button -->
+        <button id="btn-continue-game" class="btn-primary-hero" type="button">
+          <div class="btn-hero-text">
+            <span id="continue-title" class="btn-hero-title">Play Game</span>
+            <span id="continue-subtitle" class="btn-hero-sub">Level 1 • Easy</span>
+          </div>
+          <div class="btn-hero-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        </button>
+
+        <!-- Level Selection & Settings Row -->
+        <div class="menu-secondary-row">
+          <button id="btn-level-select" class="btn-outline-card flex-1" type="button">
+            <svg class="icon-md accent-blue" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"/>
+            </svg>
+            <span>Levels (1,000+)</span>
+          </button>
+
+          <button id="btn-open-settings" class="btn-outline-card" type="button">
+            <svg class="icon-md accent-navy" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+            </svg>
+            <span>Settings</span>
+          </button>
+        </div>
+
+        <!-- Daily Brain Challenge Card -->
+        <button id="btn-daily-challenge" class="daily-card" type="button">
+          <div id="daily-icon-wrap" class="daily-icon-box">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/>
+            </svg>
+          </div>
+          <div class="daily-text">
+            <div class="daily-title">Daily Brain Challenge</div>
+            <div id="daily-subtitle" class="daily-sub">Earn +2 Hints &amp; Bonus Stars</div>
+          </div>
+          <div id="daily-badge" class="daily-badge">
+            <svg class="icon-xs" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/>
+            </svg>
+            <span id="daily-badge-text">Play</span>
+          </div>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===================== GAMEPLAY SCREEN ===================== -->
+    <section id="screen-game" class="screen" aria-label="Puzzle Game Board">
+      <header class="game-topbar">
+        <button id="btn-game-back" class="icon-btn" type="button" aria-label="Back to menu">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+          </svg>
+        </button>
+
+        <div class="game-header-center">
+          <div id="game-level-title" class="game-title">Level 1</div>
+          <div class="game-tier-row">
+            <span id="game-tier-dot" class="tier-dot" aria-hidden="true"></span>
+            <span id="game-tier-meta" class="game-meta">Heart • Easy • 0 left</span>
+          </div>
+        </div>
+
+        <div class="game-header-actions">
+          <button id="btn-game-sound" class="icon-btn" type="button" aria-label="Toggle sound"></button>
+          <button id="btn-game-restart" class="icon-btn" type="button" aria-label="Restart level" title="Restart Level">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Hearts & Moves Status Pill -->
+      <div class="lives-pill-wrap">
+        <div id="lives-status-pill" class="lives-pill">
+          <div id="hearts-container" class="hearts-row" aria-label="Lives remaining"></div>
+          <div class="pill-divider" aria-hidden="true"></div>
+          <div id="moves-counter" class="moves-label">Moves: 0</div>
+        </div>
+      </div>
+
+      <!-- Centered Responsive Puzzle Board -->
+      <main id="board-stage" class="board-stage">
+        <div id="board-card" class="board-card">
+          <canvas id="puzzle-canvas" aria-label="Arrow puzzle board"></canvas>
+        </div>
+      </main>
+
+      <!-- Bottom Hint & Next Move Action Bar -->
+      <footer class="game-bottombar">
+        <div class="bottombar-inner">
+          <button id="btn-hint" class="btn-tonal-action" type="button">
+            <svg class="icon-md accent-blue" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/>
+            </svg>
+            <span id="hint-button-label">Hint (3)</span>
+          </button>
+
+          <button id="btn-next-move" class="btn-solid-action" type="button">
+            <svg class="icon-md" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29a.996.996 0 0 0-1.41 0L1.29 18.96a.996.996 0 0 0 0 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05a.996.996 0 0 0 0-1.41l-2.33-2.35zm-1.03 5.49l-2.12-2.12 2.44-2.44 2.12 2.12-2.44 2.44z"/>
+            </svg>
+            <span>Next Move</span>
+          </button>
+        </div>
+      </footer>
+    </section>
+
+    <!-- ===================== LEVEL SELECTION SCREEN ===================== -->
+    <section id="screen-levels" class="screen" aria-label="Level Selection">
+      <header class="app-bar">
+        <button id="btn-levels-back" class="icon-btn" type="button" aria-label="Back to menu">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+          </svg>
+        </button>
+        <div class="app-bar-title-group">
+          <h2 class="app-bar-title">Level Selection</h2>
+          <p id="levels-summary-subtitle" class="app-bar-sub">0 Completed • Highest: Lv. 1</p>
+        </div>
+        <button id="btn-jump-current" class="text-action-btn" type="button">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+          </svg>
+          <span id="jump-current-label">Lv. 1</span>
+        </button>
+      </header>
+
+      <div id="tier-chips-bar" class="tier-chips-bar" role="tablist" aria-label="Difficulty Tiers"></div>
+
+      <div class="levels-grid-scroll">
+        <div id="levels-grid" class="levels-grid"></div>
+      </div>
+    </section>
+
+    <!-- ===================== SETTINGS SCREEN ===================== -->
+    <section id="screen-settings" class="screen" aria-label="Settings">
+      <header class="app-bar">
+        <button id="btn-settings-back" class="icon-btn" type="button" aria-label="Back to menu">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+          </svg>
+        </button>
+        <div class="app-bar-title-group">
+          <h2 class="app-bar-title">Settings</h2>
+        </div>
+      </header>
+
+      <div class="settings-scroll">
+        <div class="settings-container">
+          <!-- Audio & Gameplay Card -->
+          <div class="settings-card">
+            <h3 class="settings-card-title">Gameplay &amp; Audio</h3>
+
+            <label class="switch-row" for="toggle-sound">
+              <div class="switch-info">
+                <span class="switch-title">Sound Effects</span>
+                <span class="switch-sub">Arrow taps, removals, and celebration chimes</span>
+              </div>
+              <input id="toggle-sound" class="m3-switch" type="checkbox" checked />
+            </label>
+
+            <div class="card-divider"></div>
+
+            <label class="switch-row" for="toggle-music">
+              <div class="switch-info">
+                <span class="switch-title">Background Music</span>
+                <span class="switch-sub">Gentle ambient focus soundtrack</span>
+              </div>
+              <input id="toggle-music" class="m3-switch" type="checkbox" checked />
+            </label>
+
+            <div class="card-divider"></div>
+
+            <label class="switch-row" for="toggle-lives">
+              <div class="switch-info">
+                <span class="switch-title">3-Lives Challenge</span>
+                <span class="switch-sub">Lose 1 heart on wrong taps. Turn off for Zen mode</span>
+              </div>
+              <input id="toggle-lives" class="m3-switch" type="checkbox" checked />
+            </label>
+          </div>
+
+          <!-- Persistence & Backup Card -->
+          <div class="settings-card">
+            <h3 class="settings-card-title">Progress &amp; Save Data</h3>
+            <p id="settings-progress-summary" class="settings-summary-text">
+              Highest Unlocked: Level 1 • Completed: 0 • Stars: 0
+            </p>
+            <p class="settings-note">
+              Progress is automatically saved in your browser after every move and level completion.
+            </p>
+            <button id="btn-reset-progress" class="btn-danger-outline" type="button">
+              Reset Local Progress
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== OVERLAYS & MODALS ===================== -->
+
+    <!-- Level Completion Overlay -->
+    <div id="overlay-complete" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="complete-heading">
+      <canvas id="confetti-canvas" class="confetti-canvas" aria-hidden="true"></canvas>
+      <div class="modal-card modal-pop">
+        <div class="modal-badge badge-blue">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/>
+          </svg>
+        </div>
+        <h2 id="complete-heading" class="modal-title">Congratulations!</h2>
+        <p id="complete-subtitle" class="modal-subtitle-blue">Level 1 Completed!</p>
+
+        <div id="complete-stars" class="stars-row" aria-label="Stars earned"></div>
+        <p id="complete-stats" class="modal-body-text">Solved in 4 moves • Level 2 Unlocked!</p>
+
+        <div class="modal-actions">
+          <button id="btn-next-level" class="btn-solid-full" type="button">
+            <span id="next-level-label">Next Level (2)</span>
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+            </svg>
+          </button>
+          <button id="btn-complete-menu" class="btn-outline-full" type="button">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span>Main Menu</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Over Overlay -->
+    <div id="overlay-gameover" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="gameover-heading">
+      <div class="modal-card modal-pop">
+        <div class="modal-badge badge-coral">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </div>
+        <h2 id="gameover-heading" class="modal-title">Out of Lives!</h2>
+        <p id="gameover-subtitle" class="modal-body-text">You ran out of hearts on Level 1.</p>
+
+        <div class="modal-actions">
+          <button id="btn-restore-lives" class="btn-emerald-full" type="button">Restore 3 Lives &amp; Continue</button>
+          <button id="btn-retry-level" class="btn-solid-full" type="button">Retry Level</button>
+          <button id="btn-gameover-menu" class="btn-outline-full" type="button">Main Menu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reward Bonus Dialog (Hints / Lives) -->
+    <div id="overlay-reward" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="reward-heading">
+      <div class="modal-card modal-card-sm modal-pop">
+        <div id="reward-badge" class="modal-badge badge-blue"></div>
+        <h2 id="reward-heading" class="modal-title-sm">Brain Boost Bonus</h2>
+        <p id="reward-body" class="modal-body-text">Claim +3 free Hints to help unlock tricky arrow paths.</p>
+
+        <div class="reward-progress-track">
+          <div id="reward-progress-bar" class="reward-progress-fill"></div>
+        </div>
+
+        <div class="modal-actions">
+          <button id="btn-claim-reward" class="btn-solid-full" type="button" disabled>Preparing Reward...</button>
+          <button id="btn-dismiss-reward" class="btn-text-only" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reset Confirmation Dialog -->
+    <div id="overlay-reset-confirm" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="reset-heading">
+      <div class="modal-card modal-card-sm modal-pop">
+        <h2 id="reset-heading" class="modal-title-sm">Reset Local Progress?</h2>
+        <p class="modal-body-text">This will reset your local unlocked levels, stars, and saved boards back to Level 1.</p>
+        <div class="modal-actions-row">
+          <button id="btn-cancel-reset" class="btn-text-only" type="button">Cancel</button>
+          <button id="btn-confirm-reset" class="btn-danger-solid" type="button">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Snackbar Toast -->
+    <div id="snackbar" class="snackbar hidden" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
